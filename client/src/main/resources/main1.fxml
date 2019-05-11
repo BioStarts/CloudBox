@@ -1,0 +1,32 @@
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.GridPane?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.ListView?>
+<VBox fx:controller="com.geekbrains.april.cloud.box.client.Controller"
+      xmlns:fx="http://javafx.com/fxml" alignment="center">
+
+    <HBox fx:id="action">
+        <Button fx:id="button" layoutX="39.0" layoutY="53.0"
+                mnemonicParsing="false"
+                onAction="#onClickMethod"
+                prefHeight="43.5" prefWidth="159.0"
+                text="Click Me!"/>
+        <Button fx:id="button2" layoutX="39.0" layoutY="53.0"
+                mnemonicParsing="false"
+                onAction="#onClickDownload"
+                prefHeight="43.5" prefWidth="159.0"
+                text="Write!"/>
+    </HBox>
+
+    <HBox VBox.vgrow="ALWAYS">
+        <ListView fx:id="destination" minWidth="200" maxWidth="200"/>
+        <ListView fx:id="source" minWidth="200" maxWidth="200"/>
+    </HBox>
+
+</VBox>

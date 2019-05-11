@@ -3,15 +3,19 @@ package com.geekbrains.april.cloud.box.client;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
 
+import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.ResourceBundle;
 
-public class Controller {
+public class Controller implements Initializable {
 
     @FXML
     private Button button;
@@ -100,5 +104,35 @@ public class Controller {
                 return FileVisitResult.CONTINUE;
             }
         });
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        //запускаем соединение
+        Network.start();
+        /*Thread t = new Thread(() -> {
+            while (true){
+                try {
+                    byte[] am = Network.readObject();//заменил абстрактмсдж на Files.nio
+                    Files.write(Paths.get(destinationWay),am,StandardOpenOption.CREATE);
+                } catch (ClassNotFoundException | IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        t.setDaemon(true);
+        t.start();*/
+        try {
+            viewSource();
+            viewDestination();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void onClickDownload(ActionEvent actionEvent) {
+
+        //Network.sendMsg(new Files());
     }
 }
