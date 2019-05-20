@@ -50,7 +50,7 @@ public class AuthHandler extends ChannelInboundHandlerAdapter {
                 isAuth =true;
                 am.setAuth(true);
                 ctx.writeAndFlush(am);
-                ctx.writeAndFlush(new FolderMessage("server/src/main/resources".substring(0)));//кидаем список файлов сервера на клиент
+                ctx.writeAndFlush(new FolderMessage("server/src/main/resources/".concat(login)));//кидаем список файлов сервера на клиент
             }
         }
 

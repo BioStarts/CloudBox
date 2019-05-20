@@ -24,6 +24,7 @@
         <TextField fx:id="tfFileName" focusTraversable="false"
                    promptText="Укажите имя файла на сервере, который хотите скачать" HBox.hgrow="ALWAYS"/>
         <Button onAction="#pressOnDownloadBtn" text="Скачать"/>
+        <Button onAction="#pressOnAddBtn" text="Загрузить"/>
         <Button onAction="#pressOnMoveBtn" text="Переместить"/>
     </HBox>
 
