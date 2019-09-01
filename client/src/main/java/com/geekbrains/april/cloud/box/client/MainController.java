@@ -3,7 +3,6 @@ package com.geekbrains.april.cloud.box.client;
 import com.geekbrains.april.cloud.box.common.*;
 import io.netty.util.ReferenceCountUtil;
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -51,22 +50,19 @@ public class MainController implements Initializable {
 
 
         Network.start();
-        setAuthenticated(false);//
+        setAuthenticated(false);
         Thread t = new Thread(() -> {
             try {
                 while (true) {
                     AbstractMessage am = Network.readObject();
                     if (am instanceof FileMessage) {
                         FileMessage fm = (FileMessage) am;
-                        //Files.write(Paths.get("C:\\Users\\User\\Geek\\cloud_3\\april-cloud-box\\client\\src\\main\\resources\\"+ userName + "\\" + fm.getFilename()), fm.getData(), StandardOpenOption.CREATE);
-                        //Files.write(Paths.get(pathDirectory + fm.getFilename()), fm.getData(), StandardOpenOption.CREATE);
-                        ////
                         if(fm.getCountChunk()==1){
                             Files.write(Paths.get(pathDirectory.toString() + fm.getFilename()), fm.getData(), StandardOpenOption.CREATE);
                         } else {
+                            System.out.println(pathDirectory.toString() + fm.getFilename());
                             Files.write(Paths.get(pathDirectory.toString() + fm.getFilename()), fm.getData(), StandardOpenOption.APPEND);
                         }
-                        ////
                         refreshLocalFilesList();
                     }
                     if (am instanceof FolderMessage){
@@ -136,13 +132,14 @@ public class MainController implements Initializable {
                         msg.setCountChunk(count);
 
                         Network.sendMsg(msg);
-                    }
-                    inputStream.read(arrbyte);
-                    count++;
-                    msg.setData(arrbyte);
-                    msg.setCountChunk(count);
+                    } else {
+                        inputStream.read(arrbyte);
+                        count++;
+                        msg.setData(arrbyte);
+                        msg.setCountChunk(count);
 
-                    Network.sendMsg(msg);
+                        Network.sendMsg(msg);
+                    }
                 }
 
 

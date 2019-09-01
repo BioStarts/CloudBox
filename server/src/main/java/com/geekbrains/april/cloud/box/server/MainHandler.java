@@ -8,6 +8,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.util.ReferenceCountUtil;
 
+import java.io.FileInputStream;
 import java.nio.ByteBuffer;
 import java.nio.file.*;
 
@@ -27,9 +28,49 @@ public class MainHandler extends ChannelInboundHandlerAdapter {
             if (msg instanceof FileRequest) {
                 FileRequest fr = (FileRequest) msg;
                 if (Files.exists(Paths.get(pathDirectory + fr.getFilename()))) {
-                    FileMessage fm = new FileMessage(Paths.get(pathDirectory + fr.getFilename()));
+                    FileMessage fm = new FileMessage(Paths.get(pathDirectory.toString() + fr.getFilename()));
+
+                    try {
+                        if (fr.getFilename().length() > 0) {
+
+                            FileInputStream inputStream = new FileInputStream(pathDirectory.toString() + fr.getFilename());
+                            System.out.println(pathDirectory.toString() + fr.getFilename() + " path");
+                            System.out.println(inputStream.available());
+                            int arrByteSize = 8192;
+                            byte[] arrbyte = new byte[arrByteSize];
+                            int count = 0;
+                            while (inputStream.available()>0){
+                                System.out.println("читаем файл");
+                                if (inputStream.available()<arrByteSize){
+                                    System.out.println(" файл меньше чем " + arrByteSize);
+
+                                    inputStream.read(arrbyte, 0, inputStream.available());
+
+                                    count++;
+                                    fm.setData(arrbyte);
+                                    fm.setCountChunk(count);
+
+                                    //Network.sendMsg(msg);
+                                    ctx.writeAndFlush(fm);
+                                } else {
+                                inputStream.read(arrbyte);
+                                count++;
+                                fm.setData(arrbyte);
+                                fm.setCountChunk(count);
+
+                                //Network.sendMsg(msg);
+                                ctx.writeAndFlush(fm);
+                                }
+                            }
+
+
+                        }
+                    } finally {
+                        ReferenceCountUtil.release(msg);
+                    }
+
                     //if (fm.getData().length < BIG_FILE) {//проверяем большой файл или нет
-                        ctx.writeAndFlush(fm);
+                    //    ctx.writeAndFlush(fm);
                     /*} else {//начинаем принимать большой файл кусками, вычитавыя куски байт
                         int countChunk = (fm.getData().length / BIG_FILE);//считаем количество кусков файла
                         System.out.println("сервер отправляет большой файл");

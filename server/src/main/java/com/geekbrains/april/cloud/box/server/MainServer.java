@@ -15,9 +15,7 @@ import io.netty.handler.codec.serialization.ObjectEncoder;
 
 
 public class MainServer {
-    /*public static void main(String[] args) {
-        Message msg = new Message("AprilBox");
-    }*/
+
     public void run() throws Exception {
         EventLoopGroup mainGroup = new NioEventLoopGroup();
         EventLoopGroup workerGroup = new NioEventLoopGroup();
